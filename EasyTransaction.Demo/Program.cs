@@ -18,7 +18,7 @@ namespace EasyTransaction.Demo
 
             builder.Services.AddScoped<IUserService, UserService>();
 
-            var db = new MySqlConnection("Server=rm-uf6p6qzd7521w6npxbo.mysql.rds.aliyuncs.com;Database=test;User Id=zhaoyang;Password=QlMGFAqKKZYX9a64u;Port=3306;");
+            var db = new MySqlConnection("Server=192.168.31.122;Database=test;User Id=xxxx;Password=xxxx;Port=3306;");
             builder.Services.AddSingleton<IDbConnection>(db);
 
             builder.Services.AddControllers();
