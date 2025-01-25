@@ -1,4 +1,5 @@
 using Dapper;
+using EasyTransaction.Core;
 using EasyTransaction.Demo.Service;
 using EsayTransaction.Aspnet;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,7 @@ namespace EasyTransaction.Demo.Controllers
         {
             //using (TransactionScope scope = new())
             //{
-            var result = await dbConnection.ExecuteAsync("INSERT INTO `student` (`name`, `age`, `describe`) VALUES ('测试事务', 222, '3312321');");
+            var result = await dbConnection.ExecuteAsync("INSERT INTO `student` (`name`, `age`, `describe`) VALUES ('测试事务Index1', 222, '3312321');");
             //scope.Complete();
             //}
 
@@ -51,7 +52,7 @@ namespace EasyTransaction.Demo.Controllers
         [EasyTransaction]
         public async Task<IActionResult> Index2()
         {
-            var result = await dbConnection.ExecuteAsync("INSERT INTO `student` (`name`, `age`, `describe`) VALUES ('测试事务', 222, '3312321');");
+            var result = await dbConnection.ExecuteAsync("INSERT INTO `student` (`name`, `age`, `describe`) VALUES ('测试事务Index2', 222, '3312321');");
 
             string name = await _userService.GetUserName();
             Console.WriteLine(name);
@@ -59,11 +60,14 @@ namespace EasyTransaction.Demo.Controllers
         }
 
         [HttpGet]
-        [EasyTransaction]
         public async Task<IActionResult> Index3()
         {
-            string name = await _userService.GetUserName();
-            Console.WriteLine(name);
+            await EasyTransactionScopeHelper.ExecuteAsync(async () =>
+            {
+                var result = await dbConnection.ExecuteAsync("INSERT INTO `student` (`name`, `age`, `describe`) VALUES ('测试事务Index3', 222, '3312321');");
+                throw new Exception("测试事务回滚");
+            });
+           
             return Ok("Hello World");
         }
     }
