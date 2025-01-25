@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyTransaction.Demo", "EasyTransaction.Demo\EasyTransaction.Demo.csproj", "{0E37BBBB-D825-4475-A25C-AC311F453DE5}"
 EndProject
@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EsayTransaction.Aspnet", "E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{BC93AE80-8D75-420B-8606-70325797972F}"
 	ProjectSection(SolutionItems) = preProject
-		RADEME.md = RADEME.md
+		README.md = README.md
 	EndProjectSection
 EndProject
 Global
