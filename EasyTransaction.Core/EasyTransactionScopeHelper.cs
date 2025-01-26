@@ -109,7 +109,7 @@ namespace EasyTransaction.Core
         /// <param name="func"></param>
         /// <param name="option"></param>
         /// <returns></returns>
-        public static Task ExecuteAsync<T>(Func<Task> func, TransactionScopeOption option)
+        public static Task ExecuteAsync(Func<Task> func, TransactionScopeOption option)
         {
             return ExecuteAsync(func, option, default);
         }
@@ -131,6 +131,53 @@ namespace EasyTransaction.Core
                 {
                     await func();
                     scope.Complete();
+                }
+                catch (Exception e)
+                {
+                    throw new EasyTransactionException("Transaction ExecuteAsync failed", e);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Execute the function within a transaction scope and return the result
+        /// </summary>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public static Task<T> ExecuteAsync<T>(Func<Task<T>> func)
+        {
+            return ExecuteAsync(func, TransactionScopeOption.Required, default);
+        }
+
+        /// <summary>
+        /// Execute the function within a transaction scope and return the result
+        /// </summary>
+        /// <param name="func"></param>
+        /// <param name="option"></param>
+        /// <returns></returns>
+        public static Task<T> ExecuteAsync<T>(Func<Task<T>> func, TransactionScopeOption option)
+        {
+            return ExecuteAsync(func, option, default);
+        }
+
+        /// <summary>
+        /// Execute the function within a transaction scope and return the result
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="func"></param>
+        /// <param name="scopeOption"></param>
+        /// <param name="transactionOptions"></param>
+        /// <returns></returns>
+        /// <exception cref="EasyTransactionException"></exception>
+        public static async Task<T> ExecuteAsync<T>(Func<Task<T>> func, TransactionScopeOption scopeOption, TransactionOptions transactionOptions)
+        {
+            using (var scope = new TransactionScope(scopeOption, transactionOptions, TransactionScopeAsyncFlowOption.Enabled))
+            {
+                try
+                {
+                    T result = await func();
+                    scope.Complete();
+                    return result;
                 }
                 catch (Exception e)
                 {
